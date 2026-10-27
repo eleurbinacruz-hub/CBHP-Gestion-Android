@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#111827">
+<meta name="application-name" content="CBHP Gestión">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Panel administrativo privado del Cuerpo de Bomberos Hatillo Palma.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+<title>Gestión del personal | CBHP</title>
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="apple-touch-icon" href="icono-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css?v=20261027-rol-2">
+<script src="app.js?v=20261027-rol-2" defer></script>
+<script src="pwa-init.js?v=20261027" defer></script>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="shell">
+  <aside class="sidebar" aria-label="Navegación administrativa">
+    <div class="brand">
+      <img src="logo-cbhp.png" alt="Escudo CBHP" width="62" height="62">
+      <div><strong>Cuerpo de Bomberos<br>Hatillo Palma</strong><span>Panel institucional</span></div>
+    </div>
+    <div class="section-label">ADMINISTRACIÓN</div>
+    <nav>
+      <a class="navlink selected" href="#personal" aria-current="page"><span aria-hidden="true">▦</span> Gestión de personal</a>
+      <a class="navlink" href="https://cbhp.org.do" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> Página pública</a>
+    </nav>
+    <div class="aside-footer"><span class="dot"></span> Acceso privado por Cloudflare Access<br><small>Servicio · Honor · Valor</small></div>
+  </aside>
+  <main class="main" id="personal">
+    <header class="header">
+      <div><div class="eyebrow">ÁREA ADMINISTRATIVA <span> / PERSONAL</span></div><h1>Gestión del personal</h1><p>Consulta y actualiza el registro institucional de forma segura.</p></div>
+      <button class="primary" type="button" id="addBtn">＋ Agregar bombero</button>
+    </header>
+    <div id="alert" class="alert hidden" role="alert" aria-live="assertive"></div>
+    <section class="stats" aria-label="Resumen del personal">
+      <article class="stat"><div class="stat-title">REGISTRADOS <span aria-hidden="true">♧</span></div><strong id="total">—</strong><p>Total de personas</p></article>
+      <article class="stat"><div class="stat-title">ACTIVOS <span aria-hidden="true">✓</span></div><strong id="activos">—</strong><p>Personal en servicio</p></article>
+      <article class="stat"><div class="stat-title">INACTIVOS <span aria-hidden="true">○</span></div><strong id="inactivos">—</strong><p>Personal fuera de servicio</p></article>
+    </section>
+    <section class="panel">
+      <div class="panel-top"><div><h2>Registro institucional</h2><p>Busca por nombre, cédula, rango o rol y administra los estados.</p></div><button id="refreshBtn" type="button" class="subtle">↻ Actualizar</button></div>
+      <form id="searchForm" class="filters" autocomplete="off">
+        <label class="search"><span class="sr-only">Buscar personal</span><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Buscar nombre, cédula, rango o rol" maxlength="80"></label>
+        <label class="state-filter"><span class="sr-only">Filtrar por estado</span><select id="estado"><option>Todos</option><option>Activo</option><option>Inactivo</option></select></label>
+        <button class="subtle" type="submit">Buscar</button>
+      </form>
+      <p class="delete-info">Para borrar un registro, usa el botón rojo <strong>Eliminar</strong> en la última columna de cada bombero. Se exigirá escribir <strong>ELIMINAR</strong> para confirmar.</p>
+      <div class="table-scroll"><table><thead><tr><th>PERSONAL / FOTO</th><th>CÉDULA</th><th>RANGO / ROL</th><th>ESTADO</th><th>EDITAR / ESTADO</th><th class="delete-head">ELIMINAR</th></tr></thead><tbody id="bodyRows"><tr><td colspan="6" class="empty">Conectando con el registro institucional…</td></tr></tbody></table></div>
+      <div class="table-footer"><span id="countLabel">—</span><div class="pager"><button id="prevBtn" class="subtle" type="button" disabled>Anterior</button><span id="pageLabel">Página 1</span><button id="nextBtn" class="subtle" type="button" disabled>Siguiente</button></div></div>
+    </section>
+    <div class="footnote"><span>Versión de panel: Rol actualizado · 2</span><span>CBHP · Información de uso institucional</span><span id="sessionStatus">Comprobando acceso…</span></div>
+  </main>
+</div>
+<div class="dialog-backdrop hidden" id="dialogBackdrop" aria-hidden="true">
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog-head"><div><div class="eyebrow">REGISTRO INSTITUCIONAL</div><h2 id="dialogTitle">Agregar bombero</h2></div><button class="close" type="button" id="closeBtn" aria-label="Cerrar">×</button></div>
+    <form id="personForm" autocomplete="off">
+      <div class="form-content">
+        <label class="field">Nombre completo <input id="nameInput" name="nombre" type="text" maxlength="120" required placeholder="Ej.: María Pérez"></label>
+        <div class="two-fields"><label class="field">Cédula (11 dígitos) <input id="cedulaInput" name="cedula" inputmode="numeric" maxlength="15" required placeholder="000-0000000-0"></label><label class="field">Rango <input id="rangoInput" name="rango" type="text" maxlength="80" required placeholder="Ej.: Capitán"></label></div>
+        <label class="field">Rol o función (opcional) <input id="rolInput" name="rol" type="text" maxlength="100" placeholder="Ej.: Jefe de Operaciones"></label>
+        <label class="field">Estado <select id="statusInput" name="estado"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></label>
+        <section class="photo-field" aria-label="Foto del bombero">
+          <div class="photo-field-heading"><strong>Fotografía del bombero</strong><span>Opcional · se guarda con el registro</span></div>
+          <div class="photo-controls">
+            <div class="photo-preview" id="photoPreview" aria-label="Vista previa de foto"><span id="photoPlaceholder">Sin foto</span><img id="photoPreviewImage" class="hidden" alt="Vista previa de la fotografía del bombero"></div>
+            <div class="photo-options">
+              <div class="photo-buttons">
+                <button type="button" class="subtle" id="uploadPhotoBtn">↑ Subir foto</button>
+                <button type="button" class="subtle" id="takePhotoBtn">📷 Tomar foto</button>
+                <button type="button" class="subtle photo-remove hidden" id="removePhotoBtn">Quitar foto</button>
+              </div>
+              <p class="photo-help" id="photoHelp">Se aceptan imágenes JPG, PNG o WebP. El panel adapta la foto automáticamente.</p>
+              <input type="file" id="photoFileInput" accept="image/jpeg,image/png,image/webp" class="sr-only" aria-label="Seleccionar imagen">
+              <input type="file" id="photoCaptureInput" accept="image/*" capture="environment" class="sr-only" aria-label="Tomar fotografía con el teléfono">
+            </div>
+          </div>
+          <div class="camera-box hidden" id="cameraBox">
+            <video id="cameraVideo" autoplay playsinline muted aria-label="Vista previa de cámara"></video>
+            <div class="camera-actions">
+              <button type="button" class="primary" id="capturePhotoBtn">Capturar foto</button>
+              <button type="button" class="subtle" id="stopCameraBtn">Cerrar cámara</button>
+            </div>
+          </div>
+        </section>
+        <div class="form-error hidden" id="formError" role="alert"></div>
+      </div>
+      <div class="dialog-actions"><button class="subtle" type="button" id="cancelBtn">Cancelar</button><button class="primary" id="saveBtn" type="submit">Guardar registro</button></div>
+    </form>
+  </section>
+</div>
+<div class="dialog-backdrop hidden" id="deleteBackdrop" aria-hidden="true">
+  <section class="dialog delete-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteDialogTitle" aria-describedby="deleteWarning">
+    <div class="dialog-head">
+      <div><div class="eyebrow">ACCIÓN DEFINITIVA</div><h2 id="deleteDialogTitle">Eliminar bombero</h2></div>
+      <button class="close" type="button" id="deleteCloseBtn" aria-label="Cerrar sin eliminar">×</button>
+    </div>
+    <form id="deleteForm" autocomplete="off">
+      <div class="form-content">
+        <p id="deleteWarning" class="delete-warning"><strong>Atención:</strong> esta acción borra definitivamente el registro de la base de datos y no se puede deshacer.</p>
+        <div class="delete-person-box">
+          <strong id="deletePersonName"></strong>
+          <span>Cédula: <span id="deletePersonCedula"></span></span>
+        </div>
+        <label class="field" for="deleteConfirmInput">Para confirmar, escribe <strong>ELIMINAR</strong> en mayúsculas:
+          <input id="deleteConfirmInput" name="confirmacion" type="text" placeholder="Escribe ELIMINAR" maxlength="8" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="off" required aria-describedby="deleteWarning">
+        </label>
+        <div class="form-error hidden" id="deleteFormError" role="alert"></div>
+      </div>
+      <div class="dialog-actions"><button class="subtle" type="button" id="deleteCancelBtn">Cancelar</button><button class="danger" id="confirmDeleteBtn" type="submit" disabled>Eliminar definitivamente</button></div>
+    </form>
+  </section>
+</div>
+</body>
+</html>

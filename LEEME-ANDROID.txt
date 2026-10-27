@@ -1,0 +1,38 @@
+CBHP - GESTIÓN DE PERSONAL COMO APP PARA ANDROID
+=================================================
+
+Este paquete convierte el panel admin que ya usas en una aplicación
+web instalable (PWA). No es un archivo APK ni se publica en Google Play.
+
+PREPARACIÓN:
+1. Comprueba que admin.cbhp.org.do sigue protegido por Cloudflare Access.
+   La política debe cubrir TODAS las rutas, incluidas /api/*, /sw.js,
+   /manifest.webmanifest y los demás archivos del panel.
+2. En Cloudflare > Workers & Pages > cbhp-admin > Deployments,
+   publica ESTE ZIP en Production.
+3. Conserva el binding D1 llamado BD, apuntando a cbhp-personal.
+4. No debes tocar cbhp-validacion-api ni la página publica cbhp.org.do.
+
+INSTALAR EN ANDROID:
+1. Abre Google Chrome en tu teléfono Android.
+2. Visita https://admin.cbhp.org.do
+3. Inicia sesión con tu correo y código de Cloudflare Access.
+4. Toca el menú de Chrome (tres puntos) y elige
+   "Añadir a pantalla de inicio" > "Instalar" (o "Instalar app").
+5. Tendrás un icono "CBHP Gestión" que abre el panel como una app.
+
+ACLARACIONES IMPORTANTES:
+- Requiere conexión a Internet para consultar, editar o guardar personal.
+- Sigue entrando con Cloudflare Access; cerrar la app NO cierra la sesión.
+- Las fotografías, nombres y cédulas NO se guardan en cache sin conexión.
+- El mismo panel sigue funcionando en computadora y por navegador.
+- Para instalar un APK real o publicarlo en Play Store hay que realizar
+  y firmar un paquete Android por separado.
+- Si Chrome solo ofrece "Crear acceso directo", el icono igualmente
+  abre el panel, pero no siempre será una app autónoma; comprueba el
+  acceso de Cloudflare y el manifest si no aparece "Instalar".
+
+COMPONENTES DEL PAQUETE:
+_worker.js, index.html, app.js, styles.css, logo-cbhp.png,
+favicon-32.png, manifest.webmanifest, pwa-init.js, sw.js,
+icono-192.png, icono-512.png, icono-maskable-512.png.
